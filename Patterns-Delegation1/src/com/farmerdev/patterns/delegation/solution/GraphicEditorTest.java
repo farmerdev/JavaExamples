@@ -8,6 +8,7 @@ import org.junit.Test;
  * @author ialcazar
  *
  */
+//TODO Modify test. Add Asserts --> Refactor
 public class GraphicEditorTest {
 	private GraphicEditor ge;
 	@Before

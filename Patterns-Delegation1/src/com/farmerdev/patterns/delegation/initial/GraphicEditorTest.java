@@ -2,7 +2,11 @@ package com.farmerdev.patterns.delegation.initial;
 
 import org.junit.Test;
 
-
+/**
+ * The original problem
+ * @author ialcazar
+ *
+ */
 public class GraphicEditorTest {
 	
 	@Test
