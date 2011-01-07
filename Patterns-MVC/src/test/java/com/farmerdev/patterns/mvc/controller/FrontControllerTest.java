@@ -12,36 +12,25 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import com.farmerdev.patterns.mvc.actions.LoginAction;
 
 
 public class FrontControllerTest {
 	private FrontController frontController;
 	@Before
-	public void setUp(){
+	public void setUp() throws ServletException{
 		frontController = new FrontController();
+		frontController.init();
 	}
 	
 	@Test
-	public void servletInitialization() throws ServletException{
-		
-		
-		frontController.init();
-		
+	public void servletInitialization(){
+				
 		assertNotNull(frontController.getAction("login.action"));
 		assertEquals("com.farmerdev.patterns.mvc.actions.LoginAction",frontController.getAction("login.action"));
 	}
-//	@Test
-//	public void getCurrentAction() throws ServletException{
-//		MockHttpServletRequest request = new MockHttpServletRequest("GET","/login.do"); 
-//		frontController.init();
-//		String currentAction = frontController.getCurrentAction(request);
-//		
-//		assertEquals("com.farmerdev.patterns.mvc.actions.LoginAction",currentAction);
-//		
-//	}
+
 	@Test
-	public void getRequestToView() throws ServletException, IOException{
+	public void getRequestWithCorrectView() throws ServletException, IOException{
 		MockHttpServletRequest request = new MockHttpServletRequest("GET","/login.do"); 
 		MockHttpServletResponse response = new MockHttpServletResponse();
 		
@@ -49,5 +38,16 @@ public class FrontControllerTest {
 		assertEquals("login.jsp",frontController.getView());
 		
 	}
+	
+	@Test
+	public void postRequestWithCorrectView() throws ServletException, IOException{
+		MockHttpServletRequest request = new MockHttpServletRequest("POST","/login.do"); 
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		
+		frontController.doGet(request,response);
+		assertEquals("login.jsp",frontController.getView());
+		
+	}
+
 
 }

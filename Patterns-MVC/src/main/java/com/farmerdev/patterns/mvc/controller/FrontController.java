@@ -17,7 +17,10 @@ import com.farmerdev.patterns.mvc.actions.core.Action;
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Properties actions;
+	private String urlAction;
 	private String view;
+	private HttpServletRequest httpServletRequest;
+	private HttpServletResponse httpServletResponse;
 	
        
 
@@ -55,22 +58,54 @@ public class FrontController extends HttpServlet {
 	}
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+		this.httpServletRequest = request;
+		this.httpServletResponse = response;
 		String action = getCurrentAction(request);	
 		
-		this.view = executeAction(action);
+		try {
+			executeAction(action);
+			this.view = actions.getProperty(this.urlAction+".nextView");
+			redirectTo(this.view);
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+	}
+
+	private void redirectTo(String nextView) throws ServletException, IOException {
+		this.httpServletRequest.getRequestDispatcher(nextView).forward(this.httpServletRequest,this.httpServletResponse);
 	}
 	
 
-	private String executeAction(String action) throws ClassNotFoundException {
+	private void executeAction(String action) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		@SuppressWarnings("rawtypes")
 		Class clazz =  Class.forName(action);
-		return null;
+		Action actionToExecute = (Action) clazz.newInstance();
+		actionToExecute.setHttpServletRequest(this.httpServletRequest);
+		actionToExecute.setHttpServletResponse(this.httpServletResponse);
+		
+		actionToExecute.execute();
+		
 	}
-
+	
 	private String getCurrentAction(HttpServletRequest request) {
 		String url 				= request.getRequestURI();
-		String urlAction 		= getActionFromUrl(url);
-		String currentAction 	= actions.getProperty(urlAction+".action");
+		this.urlAction 			= getActionFromUrl(url);
+		String currentAction 	= actions.getProperty(this.urlAction+".action");
 		
 		return currentAction;
 	}
