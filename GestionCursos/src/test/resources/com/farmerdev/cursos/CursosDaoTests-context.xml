@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="classpath:/META-INF/spring/app-context.xml"/> 
+	
+	<!-- A partir de Spring 3.0 -->
+	<!-- Por defecto crea una base de datos HSQL -->
+	<jdbc:embedded-database id="dataSource">
+   		<jdbc:script location="classpath:sql/schema.sql"/>
+   		<jdbc:script location="classpath:sql/data.sql"/>
+	</jdbc:embedded-database>
+	
+	
+<!--	<bean id="miDs" class="org.springframework.jdbc.DriverManagerDataSource">-->
+<!--		<property name="driverClassName">-->
+<!--			<value>com.mysql.jdbc.Driver</value>-->
+<!--		</property>-->
+<!--		<property name="url">-->
+<!--			<value>jdbc:mysql:///nombreBD</value>-->
+<!--		</property>-->
+<!--		<property name="username">-->
+<!--			<value>root</value>-->
+<!--		</property>-->
+<!--		<property name="password">-->
+<!--			<value>root</value>-->
+<!--		</property>-->
+<!--	</bean>-->
+	
+
+</beans>
